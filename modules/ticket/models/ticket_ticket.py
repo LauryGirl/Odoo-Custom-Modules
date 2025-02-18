@@ -4,14 +4,14 @@ from odoo import models, fields, api
 import mysql.connector
 
 
-class projects(models.Model):
-    _name = 'projects_tasks.projects'
-    _description = 'projects_tasks.projects'
+class Ticket(models.Model):
+    _name = 'ticket.ticket'
+    _description = 'My Tickets Module'
+    _rec_name = "code" 
 
-    name = fields.Char()
-    value = fields.Integer()
-    value2 = fields.Float(compute="_value_pc", store=True)
-    description = fields.Text()
+    code = fields.Char(string='Code', required=True)
+    description = fields.Text(string='Description')
+    date = fields.Date(string='Date', default=fields.Date.today)
 
     def projects_mysql(self):
         try:
@@ -36,8 +36,3 @@ class projects(models.Model):
 
         except mysql.connector.Error as e:
             print(f"Error al conectarse a MySQL: {e}")
-
-    @api.depends('value')
-    def _value_pc(self):
-         for record in self:
-             record.value2 = float(record.value) / 100
