@@ -1,0 +1,13 @@
+<odoo>
+    <record id="action_create_project_with_tasks" model="ir.actions.server">
+        <field name="name">Upload projects and tasks</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="state">code</field>
+        <field name="code">model.create_project_with_tasks()</field>
+    </record>
+
+    <menuitem id="menu_create_project_with_tasks" 
+            name="Upload projects and tasks" 
+            action="action_create_project_with_tasks" 
+            parent="project.menu_main_pm"/>
+</odoo>
