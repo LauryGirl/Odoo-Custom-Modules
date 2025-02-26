@@ -6,7 +6,7 @@
     'summary': 'Automate data entry for projects and tasks',
     'depends': ['project'],
     'data': [
-        'views/project_data.xml',
+        'views/project_data.xml'
     ],
     'license': 'LGPL-3',
     'installable': True,

@@ -10,4 +10,36 @@
             name="Upload projects and tasks" 
             action="action_create_project_with_tasks" 
             parent="project.menu_main_pm"/>
+
+    <record id="view_project_project_chatbot_form" model="ir.ui.view">
+        <field name="name">project.project.chatbot.form</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <form string="Project Chatbot" create="false" edit="false" options="{'toolbar': {'print': false, 'action': false}}">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1" class="oe_hidden"/>
+                        <field name="question"/>
+                        <button string="Ask" type="object" name="action_ask_question" class="btn-primary btn-sm"/>
+                    </group>
+                    <group>
+                        <field name="answer" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_project_project_chatbot" model="ir.actions.act_window">
+        <field name="name">Project Chatbot</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_project_project_chatbot_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_project_project_chatbot" 
+            name="Project Chatbot" 
+            action="action_project_project_chatbot" 
+            parent="project.menu_main_pm"/>
 </odoo>

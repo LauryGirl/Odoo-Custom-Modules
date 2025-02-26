@@ -2,6 +2,10 @@ from odoo import api, fields, models
 import mysql.connector
 from mysql.connector import Error
 import random
+import os
+import json
+
+import google.generativeai as genai
 
 try:
     from . import config_db
@@ -9,9 +13,77 @@ except:
     # solve: create a file named config_db.py in the same directory as this file with the requirements
     config_db = None
 
+genai.configure(api_key = config_db.API_KEY_GOOGLE)
+
 class Project(models.Model):
     _inherit = 'project.project'
 
+    question = fields.Text(string='Question', readonly=False, store=False)
+    answer = fields.Text(string='Answer', compute="_compute_answer", readonly=True, store=False)
+
+    @api.depends('question')
+    def _compute_answer(self):
+        for record in self:
+            if record.question:
+                record.answer = self.ask_question(record.question)
+            else:
+                record.answer = ''
+
+        
+
+    def action_ask_question(self):
+        print('action ask question')
+        """
+        for record in self:
+            if record.question:
+                record.answer = self.ask_question(record.question)
+            else:
+                record.answer = ''
+        """
+        
+                
+    @api.model
+    def ask_question(self, question):
+        print("Asking question..." , question)
+
+        prompt = self.generate_prompt()
+        prompt += f"\nQuestion: {question}"
+
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(prompt)
+        answer = response.text.strip()
+
+        print("Answering... " , answer)
+        return answer
+
+    def generate_prompt(self):
+        projects = self.search([], limit=300)
+        task_counts = self.env['project.task'].read_group([('project_id', 'in', projects.ids)], ['project_id'], ['project_id'])
+        task_count_dict = {task['project_id'][0]: task['project_id_count'] for task in task_counts}
+
+        projects_list = []
+        for project in projects:
+            project_data = project.export_data(['name', 'description'])['datas'][0]
+            project_data.append('task_count ' + str(task_count_dict.get(project.id, 0)))
+            projects_list.append(project_data)
+
+        project_data_json = json.dumps(projects_list)
+
+        prompt = "Here is the information about the projects and tasks:\n\n"
+        prompt += project_data_json
+
+        return prompt
+    
+    def save_prompt_to_file(self, prompt):
+        with open('prompt.txt', 'w', encoding='utf-8') as file:
+            file.write(prompt)
+
+    def read_prompt_from_file(self):
+        if os.path.exists('prompt.txt'):
+            with open('prompt.txt', 'r', encoding='utf-8') as file:
+                return file.read()
+        return ""
+                
     def create_project_with_tasks(self):
         # Delete existing projects
         existing_projects = self.search([])
@@ -207,3 +279,4 @@ class Task(models.Model):
     _inherit = 'project.task'
 
     user_id = fields.Many2one('res.users', string='Assigned to')
+
