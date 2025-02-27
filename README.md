@@ -30,3 +30,73 @@ For a standard installation please follow the <a href="https://www.odoo.com/docu
 from the documentation.
 
 To learn the software, we recommend the <a href="https://www.odoo.com/slides">Odoo eLearning</a>, or <a href="https://www.odoo.com/page/scale-up-business-game">Scale-up</a>, the <a href="https://www.odoo.com/page/scale-up-business-game">business game</a>. Developers can start with <a href="https://www.odoo.com/documentation/master/developer/howtos.html">the developer tutorials</a>
+
+
+Odoo Project Setup
+----
+This repository contains the configuration for setting up an Odoo project. Follow the steps below to get your Odoo environment up and running.
+
+Prerequisites
+
+Python 3.6+
+PostgreSQL
+Node.js and npm
+
+Setup Instructions
+1. Clone the Repository
+git clone <repository_url>
+cd <repository_name>
+
+2. Install Dependencies
+Install the required Python packages.
+
+pip install -r requirements.txt
+
+3. Set Up PostgreSQL
+Create a PostgreSQL database and user for Odoo.
+
+CREATE DATABASE odoo;
+CREATE USER odoo WITH ENCRYPTED PASSWORD 'odoo';
+GRANT ALL PRIVILEGES ON DATABASE odoo TO odoo;
+
+4. Configure Odoo
+Edit the odoo.conf file to configure the database connection.
+
+[options]
+db_host = localhost
+db_port = 5432
+db_user = odoo
+db_password = odoo
+addons_path = addons,modules
+
+5. Install Node.js Packages
+Install the necessary Node.js packages.
+
+npm install -g less less-plugin-clean-css
+
+6. Install wkhtmltopdf
+Download and install wkhtmltopdf from wkhtmltopdf.org.
+
+7. Run Odoo
+Start the Odoo server.
+
+python odoo-bin -c odoo.conf
+
+8. Access Odoo
+Open your web browser and go to http://localhost:8069 to access the Odoo web interface.
+
+9. Configure Odoo
+Create a New Database: Follow the on-screen instructions to create a new database.
+Install Modules: Navigate to the Apps menu and install the necessary modules for your project.
+Customize Settings: Configure the settings according to your project requirements.
+
+10. Develop Custom Modules
+Create a Custom Module: Use the odoo-bin scaffold command to create a new module.
+
+python odoo-bin scaffold <module_name> modules
+
+Install the Module: Go to the Apps menu, update the app list, and install your custom module.
+
+11. Update and Maintain
+Update Modules: Use the Odoo web interface to update modules as needed.
+Backup Database: Regularly backup your database to prevent data loss.
