@@ -1,4 +1,5 @@
 <odoo>
+    <!-- Action to create project and tasks -->
     <record id="action_create_project_with_tasks" model="ir.actions.server">
         <field name="name">Upload projects and tasks</field>
         <field name="model_id" ref="project.model_project_project"/>
@@ -6,11 +7,13 @@
         <field name="code">model.create_project_with_tasks()</field>
     </record>
 
+    <!-- Menu item to create project and tasks -->
     <menuitem id="menu_create_project_with_tasks" 
             name="Upload projects and tasks" 
             action="action_create_project_with_tasks" 
             parent="project.menu_main_pm"/>
 
+    <!-- Project Chatbot Modal View -->
     <record id="view_project_project_chatbot_form" model="ir.ui.view">
         <field name="name">project.project.chatbot.form</field>
         <field name="model">project.project</field>
@@ -30,6 +33,7 @@
         </field>
     </record>
 
+    <!-- Action to project chatbot -->
     <record id="action_project_project_chatbot" model="ir.actions.act_window">
         <field name="name">Project Chatbot</field>
         <field name="res_model">project.project</field>
@@ -38,6 +42,7 @@
         <field name="target">new</field>
     </record>
 
+    <!-- Menu item to project chatbot -->
     <menuitem id="menu_project_project_chatbot" 
             name="Project Chatbot" 
             action="action_project_project_chatbot" 
