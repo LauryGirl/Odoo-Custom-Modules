@@ -49,3 +49,6 @@ package.json
 /man/
 /share/
 /src/
+
+# config_db file into project_automation module
+modules/project_automation/models/config_db.py
